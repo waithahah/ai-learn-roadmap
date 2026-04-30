@@ -1,0 +1,1643 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>零基础到独立开发 AI 应用学习方案</title>
+  <style>
+    :root {
+      --bg: #f5f7f3;
+      --ink: #15201d;
+      --muted: #64706b;
+      --paper: #fffef8;
+      --line: #d9dfd4;
+      --green: #087763;
+      --blue: #245ca8;
+      --red: #c94f37;
+      --yellow: #f1c55b;
+      --soft-green: #e6f2ed;
+      --soft-blue: #e8eef8;
+      --soft-red: #f7e8e2;
+      --shadow: 0 24px 70px rgba(18, 31, 27, .14);
+      font-family: "Inter", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(8,119,99,.06) 1px, transparent 1px),
+        linear-gradient(rgba(8,119,99,.05) 1px, transparent 1px),
+        var(--bg);
+      background-size: 34px 34px;
+    }
+
+    .deck { width: 100vw; height: 100vh; position: relative; }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      padding: clamp(34px, 5vw, 70px);
+    }
+
+    .slide.is-active {
+      display: grid;
+      animation: enter .34s ease both;
+    }
+
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .frame {
+      width: min(1220px, 100%);
+      height: min(670px, calc(100vh - 170px));
+      margin: auto;
+      display: grid;
+      gap: 22px;
+      align-content: center;
+    }
+
+    .two,
+    .three,
+    .four,
+    .timeline,
+    .map,
+    .day-grid,
+    .project-list {
+      display: grid;
+      gap: 18px;
+    }
+
+    .cover { grid-template-columns: 1.05fr .95fr; align-items: center; }
+    .two { grid-template-columns: 1fr 1fr; }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .stack { align-content: start; }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      font-size: clamp(50px, 7vw, 92px);
+      line-height: .96;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      font-size: clamp(34px, 4vw, 56px);
+      line-height: 1.04;
+      letter-spacing: 0;
+      max-width: 980px;
+    }
+
+    h3 { font-size: 22px; line-height: 1.25; }
+
+    .eyebrow {
+      color: var(--green);
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .lede {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: clamp(20px, 2vw, 27px);
+      line-height: 1.45;
+      max-width: 780px;
+    }
+
+    .signature {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      margin-top: 22px;
+      padding: 9px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255, 254, 248, .64);
+      font-size: 15px;
+      font-weight: 750;
+    }
+
+    .panel, .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,254,248,.9);
+      box-shadow: var(--shadow);
+    }
+
+    .panel { padding: 30px; }
+    .card { padding: 22px; min-height: 132px; box-shadow: none; }
+    .card.green { background: var(--soft-green); border-color: rgba(8,119,99,.2); }
+    .card.blue { background: var(--soft-blue); border-color: rgba(36,92,168,.18); }
+    .card.red { background: var(--soft-red); border-color: rgba(201,79,55,.18); }
+
+    .card p, li {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.48;
+    }
+
+    ul { margin: 12px 0 0; padding-left: 1.1em; }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 8px;
+    }
+
+    .tag {
+      min-width: 44px;
+      height: 44px;
+      padding: 0 14px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 999px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      color: var(--green);
+      font-weight: 900;
+    }
+
+    .hero-note {
+      border-left: 7px solid var(--green);
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero-note strong {
+      display: block;
+      font-size: 30px;
+      line-height: 1.22;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+    .stage {
+      min-height: 188px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+    }
+
+    .stage b {
+      display: block;
+      color: var(--red);
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .stage span {
+      display: block;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.42;
+      margin-top: 8px;
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: 180px repeat(4, 1fr);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--paper);
+    }
+
+    .matrix > div {
+      padding: 12px 14px;
+      min-height: 58px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+      line-height: 1.42;
+      color: var(--muted);
+    }
+
+    .matrix > div:nth-child(5n) { border-right: 0; }
+    .matrix > div:nth-last-child(-n+5) { border-bottom: 0; }
+    .matrix .head { background: var(--soft-green); color: var(--ink); font-weight: 850; }
+    .matrix .row { color: var(--blue); font-weight: 850; }
+
+    .map {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+
+    .node {
+      min-height: 108px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+    }
+
+    .node strong { display: block; color: var(--green); margin-bottom: 8px; font-size: 18px; }
+    .node span { color: var(--muted); font-size: 15px; line-height: 1.42; }
+
+    .day-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 20px;
+    }
+
+    .routine {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--paper);
+    }
+
+    .routine div {
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.45;
+    }
+
+    .routine div:nth-child(odd) { color: var(--ink); font-weight: 850; background: var(--soft-blue); }
+    .routine div:nth-last-child(-n+2) { border-bottom: 0; }
+
+    .project-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .project {
+      min-height: 150px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+    }
+
+    .project b {
+      display: inline-grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: var(--green);
+      color: white;
+      margin-bottom: 14px;
+    }
+
+    .bigline {
+      font-size: clamp(34px, 4.6vw, 60px);
+      line-height: 1.18;
+      font-weight: 900;
+    }
+
+    .notes { display: none; }
+
+    .nav {
+      position: fixed;
+      left: 24px;
+      right: 24px;
+      bottom: 18px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .nav button {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      color: var(--ink);
+      min-width: 92px;
+      height: 42px;
+      padding: 0 14px;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(18,31,27,.1);
+    }
+
+    .nav button:hover { border-color: var(--green); color: var(--green); }
+
+    .counter {
+      color: var(--muted);
+      font-size: 14px;
+      padding: 0 12px;
+    }
+
+    .progress {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 4px;
+      background: rgba(21,32,29,.08);
+    }
+
+    .bar {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--red), var(--yellow));
+      transition: width .2s ease;
+    }
+
+    .overview {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      padding: 30px;
+      overflow: auto;
+      background: rgba(245,247,243,.97);
+    }
+
+    .overview.is-open { display: grid; }
+
+    .thumb {
+      text-align: left;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      padding: 18px;
+      min-height: 120px;
+      cursor: pointer;
+      color: var(--ink);
+    }
+
+    .thumb b { display: block; color: var(--green); margin-bottom: 8px; }
+    .thumb span { font-weight: 800; line-height: 1.3; }
+
+    @media (max-width: 980px) {
+      body { overflow: auto; }
+      .deck { min-height: 100vh; }
+      .slide { padding: 26px 16px 82px; }
+      .slide.is-active { position: relative; min-height: 100vh; }
+      .frame, .cover, .two, .three, .four, .timeline, .map, .day-grid, .project-list {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      .matrix { grid-template-columns: 1fr; }
+      .matrix > div, .matrix > div:nth-child(5n), .matrix > div:nth-last-child(-n+5) {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .nav { left: 12px; right: 12px; }
+      .nav button { min-width: 76px; }
+    }
+
+    /* Modern deck skin: AI learning command center */
+    :root {
+      --bg: #0d1211;
+      --ink: #edf7f2;
+      --muted: #9baaa4;
+      --paper: rgba(19, 29, 27, .78);
+      --line: rgba(210, 234, 224, .16);
+      --green: #4fe0b6;
+      --blue: #78a8ff;
+      --red: #ff7b5c;
+      --yellow: #ffd36a;
+      --soft-green: rgba(79, 224, 182, .13);
+      --soft-blue: rgba(120, 168, 255, .14);
+      --soft-red: rgba(255, 123, 92, .13);
+      --shadow: 0 26px 90px rgba(0, 0, 0, .38);
+      font-family: "Aptos", "Segoe UI Variable", "Microsoft YaHei", sans-serif;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 12% 18%, rgba(79, 224, 182, .18), transparent 28%),
+        radial-gradient(circle at 82% 12%, rgba(120, 168, 255, .16), transparent 26%),
+        radial-gradient(circle at 72% 88%, rgba(255, 123, 92, .12), transparent 30%),
+        linear-gradient(135deg, #0b1110 0%, #111716 48%, #0f141d 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(237, 247, 242, .055) 1px, transparent 1px),
+        linear-gradient(rgba(237, 247, 242, .045) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at 50% 45%, black, transparent 82%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .16;
+      background-image:
+        linear-gradient(115deg, transparent 0 46%, rgba(255, 255, 255, .45) 49%, transparent 52%),
+        linear-gradient(rgba(255,255,255,.16) 1px, transparent 1px);
+      background-size: 260px 260px, 6px 6px;
+      mix-blend-mode: overlay;
+    }
+
+    .slide {
+      isolation: isolate;
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 34px;
+      z-index: -1;
+      border: 1px solid rgba(237, 247, 242, .1);
+      border-radius: 24px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.05), rgba(255,255,255,.01)),
+        rgba(5, 10, 9, .22);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 40px 120px rgba(0,0,0,.2);
+    }
+
+    .frame {
+      gap: 26px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      padding: 8px 12px;
+      border: 1px solid rgba(79, 224, 182, .28);
+      border-radius: 999px;
+      background: rgba(79, 224, 182, .08);
+      color: var(--green);
+      box-shadow: 0 0 34px rgba(79, 224, 182, .09);
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 18px var(--green);
+    }
+
+    h1, h2 {
+      font-family: "Bahnschrift", "Aptos Display", "Microsoft YaHei", sans-serif;
+      font-weight: 850;
+      text-wrap: balance;
+    }
+
+    h1 {
+      max-width: 850px;
+      text-shadow: 0 18px 60px rgba(0,0,0,.45);
+    }
+
+    h2 {
+      color: #f5fff9;
+    }
+
+    h3 {
+      color: #f8fffb;
+      font-weight: 780;
+    }
+
+    .lede {
+      color: #b5c6bf;
+    }
+
+    .signature {
+      color: #c9d9d2;
+      background: rgba(255,255,255,.06);
+      border-color: rgba(222, 244, 235, .16);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .panel,
+    .card,
+    .stage,
+    .node,
+    .project,
+    .matrix,
+    .routine,
+    .thumb {
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.025)),
+        rgba(14, 22, 20, .72);
+      border-color: rgba(222, 244, 235, .14);
+      box-shadow: 0 18px 55px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .panel:hover,
+    .card:hover,
+    .stage:hover,
+    .node:hover,
+    .project:hover {
+      transform: translateY(-2px);
+      border-color: rgba(79, 224, 182, .32);
+      box-shadow: 0 24px 70px rgba(0,0,0,.34), 0 0 0 1px rgba(79,224,182,.06);
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .card.green,
+    .card.blue,
+    .card.red {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card.green::before,
+    .card.blue::before,
+    .card.red::before,
+    .stage::before,
+    .project::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--red));
+      opacity: .86;
+    }
+
+    .card.green { background: linear-gradient(145deg, rgba(79,224,182,.18), rgba(255,255,255,.025)); }
+    .card.blue { background: linear-gradient(145deg, rgba(120,168,255,.18), rgba(255,255,255,.025)); }
+    .card.red { background: linear-gradient(145deg, rgba(255,123,92,.18), rgba(255,255,255,.025)); }
+
+    .card p,
+    .project p,
+    li,
+    .node span,
+    .stage span {
+      color: #aabbb4;
+    }
+
+    .four .card {
+      min-height: 178px;
+    }
+
+    .three .card {
+      min-height: 198px;
+    }
+
+    .timeline {
+      gap: 9px;
+    }
+
+    .timeline .stage {
+      min-height: 178px;
+      padding: 15px;
+    }
+
+    .map {
+      gap: 10px;
+    }
+
+    .project-list .project {
+      min-height: 148px;
+      padding: 18px;
+    }
+
+    .model-board {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .model-column {
+      display: grid;
+      gap: 12px;
+    }
+
+    .model-column h3 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 4px;
+    }
+
+    .model-pill {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(79, 224, 182, .12);
+      color: var(--green);
+      border: 1px solid rgba(79, 224, 182, .22);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .model-card {
+      position: relative;
+      min-height: 118px;
+      padding: 17px;
+      overflow: hidden;
+      border: 1px solid rgba(222, 244, 235, .14);
+      border-radius: 8px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.025)),
+        rgba(14, 22, 20, .72);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .model-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: linear-gradient(var(--green), var(--blue), var(--red));
+    }
+
+    .model-card strong {
+      display: block;
+      color: #ffffff;
+      font-size: 19px;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .model-card span {
+      display: block;
+      color: #aabbb4;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .model-advice {
+      margin-top: 4px;
+      padding: 18px 20px;
+      border: 1px solid rgba(255, 211, 106, .18);
+      border-radius: 8px;
+      color: #e7dcb9;
+      background: linear-gradient(135deg, rgba(255, 211, 106, .12), rgba(79, 224, 182, .06));
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .tool-card {
+      position: relative;
+      min-height: 178px;
+      padding: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(222, 244, 235, .14);
+      border-radius: 8px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.025)),
+        rgba(14, 22, 20, .72);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .tool-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--red));
+    }
+
+    .tool-card strong {
+      display: block;
+      color: #ffffff;
+      font-size: 19px;
+      line-height: 1.2;
+      margin-bottom: 9px;
+    }
+
+    .tool-card span {
+      display: block;
+      color: #aabbb4;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .tool-card em {
+      display: inline-flex;
+      margin-top: 12px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      color: var(--green);
+      background: rgba(79, 224, 182, .1);
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 850;
+    }
+
+    .matrix > div {
+      min-height: 56px;
+      padding: 11px 13px;
+      font-size: 14px;
+    }
+
+    .hero-note {
+      border-left: 0;
+      position: relative;
+      min-height: 360px;
+      overflow: hidden;
+    }
+
+    .hero-note::after {
+      content: "AI";
+      position: absolute;
+      right: -6px;
+      bottom: -38px;
+      font: 900 148px/1 "Bahnschrift", sans-serif;
+      color: rgba(79, 224, 182, .08);
+      letter-spacing: 0;
+    }
+
+    .hero-note strong {
+      font-size: 34px;
+      color: #ffffff;
+    }
+
+    .tag {
+      color: #061310;
+      border: 0;
+      background: linear-gradient(135deg, var(--green), #b6ffe6);
+      box-shadow: 0 16px 45px rgba(79, 224, 182, .2);
+    }
+
+    .stage,
+    .project {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stage b,
+    .project b {
+      color: #061310;
+      background: linear-gradient(135deg, var(--yellow), var(--red));
+      -webkit-background-clip: initial;
+      background-clip: initial;
+      box-shadow: 0 10px 30px rgba(255, 123, 92, .2);
+    }
+
+    .stage b {
+      display: inline-grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      font-size: 26px;
+    }
+
+    .matrix {
+      overflow: hidden;
+    }
+
+    .matrix > div {
+      border-color: rgba(222, 244, 235, .12);
+      color: #aabbb4;
+    }
+
+    .matrix .head {
+      background: rgba(79, 224, 182, .13);
+      color: #ecfff7;
+    }
+
+    .matrix .row {
+      color: var(--blue);
+    }
+
+    .node strong {
+      color: var(--green);
+    }
+
+    .routine div {
+      border-color: rgba(222, 244, 235, .12);
+      color: #aabbb4;
+    }
+
+    .routine div:nth-child(odd) {
+      background: rgba(120, 168, 255, .12);
+      color: #f5fff9;
+    }
+
+    .bigline {
+      color: #ffffff;
+      background: linear-gradient(90deg, #ffffff, var(--green), var(--yellow));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .nav {
+      left: 50%;
+      right: auto;
+      bottom: 18px;
+      transform: translateX(-50%);
+      width: min(720px, calc(100vw - 32px));
+      padding: 10px;
+      border: 1px solid rgba(222, 244, 235, .14);
+      border-radius: 999px;
+      background: rgba(12, 18, 17, .78);
+      box-shadow: 0 18px 60px rgba(0,0,0,.36), inset 0 1px 0 rgba(255,255,255,.07);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .nav button {
+      min-width: 88px;
+      height: 40px;
+      border: 1px solid rgba(222, 244, 235, .12);
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      color: #eafff8;
+      box-shadow: none;
+      transition: background .18s ease, color .18s ease, transform .18s ease;
+    }
+
+    .nav button:hover {
+      transform: translateY(-1px);
+      background: var(--green);
+      color: #061310;
+      border-color: transparent;
+    }
+
+    .counter {
+      color: #b9cac3;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress {
+      height: 5px;
+      background: rgba(255,255,255,.07);
+    }
+
+    .bar {
+      box-shadow: 0 0 24px rgba(79, 224, 182, .45);
+    }
+
+    .overview {
+      background:
+        radial-gradient(circle at 20% 20%, rgba(79, 224, 182, .12), transparent 30%),
+        rgba(10, 16, 15, .96);
+    }
+
+    .thumb {
+      color: var(--ink);
+    }
+
+    .thumb:hover {
+      border-color: rgba(79, 224, 182, .38);
+    }
+
+    .thumb b {
+      color: var(--green);
+    }
+
+    @media (max-width: 980px) {
+      .slide::before {
+        inset: 12px;
+        border-radius: 18px;
+      }
+
+      .hero-note {
+        min-height: auto;
+      }
+
+      .nav {
+        width: calc(100vw - 20px);
+        gap: 8px;
+      }
+
+      .nav button {
+        min-width: auto;
+        padding: 0 12px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        width: 100vw;
+        min-height: 100svh;
+        overflow: hidden;
+      }
+
+      body::before {
+        background-size: 28px 28px;
+      }
+
+      .deck {
+        height: 100svh;
+        min-height: 100svh;
+        overflow: hidden;
+      }
+
+      .slide {
+        position: absolute;
+        inset: 0;
+        padding: 18px 12px 82px;
+        overflow: hidden;
+      }
+
+      .slide.is-active {
+        position: absolute;
+        min-height: 0;
+      }
+
+      .slide::before {
+        inset: 8px;
+        border-radius: 18px;
+      }
+
+      .frame {
+        width: 100%;
+        height: calc(100svh - 112px);
+        min-height: 0;
+        margin: 0 auto;
+        padding: 16px 10px 8px;
+        gap: 14px;
+        align-content: start;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: none;
+      }
+
+      .frame::-webkit-scrollbar {
+        display: none;
+      }
+
+      .cover,
+      .two,
+      .three,
+      .four,
+      .timeline,
+      .map,
+      .day-grid,
+      .project-list {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      h1 {
+        font-size: clamp(36px, 12vw, 54px);
+        line-height: 1;
+      }
+
+      h2 {
+        font-size: clamp(28px, 9vw, 42px);
+        line-height: 1.08;
+      }
+
+      h3 {
+        font-size: 18px;
+      }
+
+      .eyebrow {
+        margin-bottom: 12px;
+        padding: 7px 10px;
+        font-size: 12px;
+      }
+
+      .lede {
+        margin-top: 14px;
+        font-size: 17px;
+        line-height: 1.45;
+      }
+
+      .signature {
+        margin-top: 14px;
+        padding: 8px 11px;
+        font-size: 13px;
+      }
+
+      .topline {
+        align-items: flex-start;
+        margin-bottom: 2px;
+      }
+
+      .tag {
+        min-width: 38px;
+        height: 38px;
+        padding: 0 10px;
+        font-size: 13px;
+        flex: 0 0 auto;
+      }
+
+      .panel,
+      .card,
+      .stage,
+      .node,
+      .project {
+        padding: 16px;
+        min-height: auto;
+      }
+
+      .hero-note {
+        min-height: 230px;
+      }
+
+      .hero-note strong {
+        font-size: 22px;
+      }
+
+      .hero-note::after {
+        right: 6px;
+        bottom: -22px;
+        font-size: 92px;
+      }
+
+      .card p,
+      .project p,
+      li,
+      .node span,
+      .stage span {
+        font-size: 14px;
+        line-height: 1.45;
+      }
+
+      ul {
+        margin-top: 8px;
+      }
+
+      .four .card,
+      .three .card,
+      .timeline .stage,
+      .project-list .project {
+        min-height: auto;
+      }
+
+      .stage b {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        font-size: 21px;
+        margin-bottom: 8px;
+      }
+
+      .matrix {
+        display: block;
+        border-radius: 12px;
+      }
+
+      .matrix > div {
+        min-height: 0;
+        padding: 11px 12px;
+        border-right: 0;
+        border-bottom: 1px solid rgba(222, 244, 235, .12);
+        font-size: 13px;
+      }
+
+      .matrix .head {
+        display: none;
+      }
+
+      .matrix .row {
+        background: rgba(120, 168, 255, .1);
+        color: var(--green);
+      }
+
+      .routine {
+        grid-template-columns: 84px 1fr;
+      }
+
+      .routine div {
+        padding: 12px;
+        font-size: 14px;
+      }
+
+      .project b {
+        width: 30px;
+        height: 30px;
+        margin-bottom: 10px;
+      }
+
+      .model-board {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .tool-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .model-card {
+        min-height: auto;
+        padding: 15px;
+      }
+
+      .tool-card {
+        min-height: auto;
+        padding: 15px;
+      }
+
+      .model-card strong {
+        font-size: 17px;
+      }
+
+      .model-card span {
+        font-size: 13px;
+      }
+
+      .tool-card strong {
+        font-size: 17px;
+      }
+
+      .tool-card span {
+        font-size: 13px;
+      }
+
+      .bigline {
+        font-size: clamp(28px, 9vw, 42px);
+      }
+
+      .nav {
+        width: calc(100vw - 18px);
+        bottom: 10px;
+        padding: 8px;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        border-radius: 18px;
+      }
+
+      .nav > div {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 6px;
+        grid-column: 1 / 4;
+        grid-row: 2;
+      }
+
+      .nav #prev {
+        grid-column: 1;
+      }
+
+      .nav .counter {
+        grid-column: 2;
+        text-align: center;
+        align-self: center;
+      }
+
+      .nav button {
+        height: 36px;
+        padding: 0 10px;
+        font-size: 13px;
+      }
+
+      .overview {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <section class="slide is-active">
+      <div class="frame cover">
+        <div>
+          <h2>零基础<br>AI 应用开发教程</h2>
+          <p class="lede">从不会编程开始，按阶段补齐计算机、Python、AI 基础、大模型、RAG、Agent、部署和项目落地能力。</p>
+          <p class="signature">作者：wait</p>
+        </div>
+        <div class="panel hero-note">
+          <strong>最终目标：能独立做出 AI 聊天机器人、知识库问答、AI 助手、私有部署大模型，并具备接单交付能力。</strong>
+          <p>这份路线不追求“学术全懂”，而是用最短路径建立能做项目的知识骨架。</p>
+        </div>
+      </div>
+      <div class="notes">这份学习方案面向完全零基础的人。重点不是一开始就钻算法公式，而是先建立能动手的能力，再逐步理解背后的 AI 原理。整个路线有一个判断标准：每学一段，都要能做出一个更完整的作品。最后不是“看过很多课”，而是能交付聊天机器人、知识库问答、AI 助手和私有模型部署这样的真实项目。</div>
+    </section>
+
+    <section class="slide">
+      <div class="frame stack">
+        <div class="topline"><h2>总路线：7 个阶段，约 6 到 9 个月</h2><span class="tag">01</span></div>
+        <div class="timeline">
+          <div class="stage"><b>1</b><h3>入门基础</h3><span>电脑、网络、文件、命令行、学习方法。2 周。</span></div>
+          <div class="stage"><b>2</b><h3>编程必备</h3><span>Python、Git、数据格式、调试。6-8 周。</span></div>
+          <div class="stage"><b>3</b><h3>AI 基础</h3><span>机器学习、深度学习、数据与评估。4-6 周。</span></div>
+          <div class="stage"><b>4</b><h3>大模型基础</h3><span>Prompt、Token、上下文、API 调用。4 周。</span></div>
+          <div class="stage"><b>5</b><h3>微调部署</h3><span>LoRA、量化、推理服务、私有部署。4-6 周。</span></div>
+          <div class="stage"><b>6</b><h3>应用实战</h3><span>前端、后端、RAG、Agent、数据库。8-10 周。</span></div>
+          <div class="stage"><b>7</b><h3>落地接单</h3><span>作品集、报价、交付、维护。持续迭代。</span></div>
+        </div>
+      </div>
+      <div class="notes">这页是全局地图。零基础最怕两个坑：第一，直接冲大模型论文，结果很快失去信心；第二，只会调用 API，却不知道怎么做成完整应用。正确路线是先会用电脑和命令行，再学 Python，再补 AI 概念，然后进入大模型、部署和应用开发。阶段时长是按每天 2 到 3 小时估算，如果时间更少，可以把周期拉长，但顺序不建议乱。</div>
+    </section>
+
+    <section class="slide">
+      <div class="frame stack">
+        <div class="topline"><h2>完整知识图谱：你最终要补齐这些模块</h2><span class="tag">02</span></div>
+        <div class="map">
+          <div class="node"><strong>计算机基础</strong><span>文件、路径、网络、HTTP、终端、环境变量、进程。</span></div>
+          <div class="node"><strong>Python</strong><span>变量、函数、类、包管理、虚拟环境、异常、文件读写。</span></div>
+          <div class="node"><strong>前端基础</strong><span>HTML、CSS、JavaScript、表单、请求、React 基础。</span></div>
+          <div class="node"><strong>后端接口</strong><span>FastAPI、REST API、鉴权、数据库、异步任务、日志。</span></div>
+          <div class="node"><strong>AI 基础</strong><span>数据集、训练、推理、过拟合、指标、神经网络。</span></div>
+          <div class="node"><strong>大模型原理</strong><span>Transformer、Token、Embedding、上下文窗口、推理参数。</span></div>
+          <div class="node"><strong>向量数据库</strong><span>向量化、相似度、索引、metadata、Milvus、Qdrant、Chroma。</span></div>
+          <div class="node"><strong>RAG</strong><span>切分、召回、重排、引用、权限、评测、知识库更新。</span></div>
+          <div class="node"><strong>Agent</strong><span>工具调用、规划、记忆、状态、审批、安全边界。</span></div>
+          <div class="node"><strong>模型部署</strong><span>Ollama、vLLM、Docker、GPU、量化、监控、成本。</span></div>
+        </div>
+      </div>
+      <div class="notes">这张图把所有要学的基础知识摊开。它看起来多，但不是每一块都要变成专家。目标是达到“能做项目”的够用水平。比如前端不用先学到复杂动画，能做表单、聊天窗口、文件上传就够用；AI 理论不用一开始推导全部公式，但要懂训练、推理、评估和过拟合。学习时要不断把知识点挂到项目上，否则很容易学散。</div>
+    </section>
+
+    <section class="slide">
+      <div class="frame stack">
+        <div class="topline"><h2>阶段 1：零基础入门，先学会“使用开发环境”</h2><span class="tag">03</span></div>
+        <div class="matrix">
+          <div class="head">项目</div><div class="head">必学知识点</div><div class="head">学习顺序</div><div class="head">重点难点</div><div class="head">避坑</div>
+          <div class="row">目标</div><div>电脑文件、路径、压缩包、浏览器、账号、英文报错</div><div>文件管理 → 软件安装 → 终端 → 网络基础</div><div>理解“程序在哪运行”</div><div>不要一开始就背算法</div>
+          <div class="row">工具</div><div>VS Code、Chrome、PowerShell、GitHub、ChatGPT/Claude</div><div>先会安装，再会打开项目</div><div>环境变量和路径</div><div>不要装一堆不懂的软件</div>
+          <div class="row">练习</div><div>创建文件夹、打开终端、运行第一个命令</div><div>每天 30 分钟命令行</div><div>看到报错不慌</div><div>不要复制命令不看输出</div>
+        </div>
+      </div>
+      <div class="notes">第一阶段看起来简单，但对零基础非常关键。很多人不是输在 AI，而是输在环境配置、路径、终端、文件结构这些基本概念上。建议用两周时间把开发环境摸熟：知道代码文件在哪里，知道命令在哪运行，知道报错怎么复制给 AI 工具分析。这个阶段不要急着学模型，先把“我能让电脑按我的指令运行”这件事建立起来。</div>
+    </section>
+
+    <section class="slide">
+      <div class="frame stack">
+        <div class="topline"><h2>阶段 2：编程必备，以 Python 为主线</h2><span class="tag">04</span></div>
+        <div class="three">
+          <div class="card green"><h3>必学知识点</h3><ul><li>变量、类型、条件、循环</li><li>函数、模块、包管理</li><li>列表、字典、JSON、文件读写</li><li>异常处理、日志、调试</li><li>Git 基础和虚拟环境</li></ul></div>
+          <div class="card"><h3>学习顺序</h3><ul><li>Python 语法 2 周</li><li>小脚本和文件处理 2 周</li><li>API 请求和 JSON 1 周</li><li>Git、venv、pip 1 周</li><li>综合小项目 1-2 周</li></ul></div>
+          <div class="card red"><h3>重点难点与避坑</h3><ul><li>难点：函数、数据结构、报错定位</li><li>不要沉迷刷算法题</li><li>不要只看课不写代码</li><li>每 3 天做一个小脚本</li></ul></div>
+        </div>
+      </div>
+      <div class="notes">Python 是这条路线的第一条硬技能主线。对 AI 应用开发来说，Python 不需要先刷到算法竞赛水平，但必须熟练处理数据、文件、API 和错误。学习时建议用真实小任务练习，比如批量重命名文件、读取 Excel、调用一个天气 API、把网页内容保存成 JSON。只看视频不会形成编程能力，必须每天写代码，并学会让 AI 帮你解释报错。</div>
+    </section>
+
+    <section class="slide">
+      <div class="frame stack">
+        <div class="topline"><h2>阶段 3：AI 基础理论，学“够用的原理”</h2><span class="tag">05</span></div>
+        <div class="two">
+          <div class="panel">
+            <h3>推荐学习内容</h3>
+            <ul>
+              <li>什么是数据集、特征、标签、训练、推理</li>
+              <li>分类、回归、聚类的基本区别</li>
+              <li>准确率、召回率、F1、混淆矩阵</li>
+              <li>神经网络、梯度下降、过拟合</li>
+              <li>PyTorch 基础：张量、模型、训练循环</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>学习原则</h3>
+            <p class="lede">不要把目标设成“成为算法研究员”。你的目标是能判断模型为什么会错、如何评估、如何把 AI 能力接进应用。</p>
+            <ul>
+              <li>公式看懂含义即可，先不追求推导全会</li>
+              <li>每个概念配一个小实验</li>
+              <li>重点理解评估，不要只理解训练</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="notes">AI 基础理论阶段的定位要讲清楚：不是把普通人培养成论文研究员，而是让他具备判断 AI 系统的基本能力。比如为什么训练集效果好，上线效果差；为什么准确率高但用户觉得不好用；为什么数据质量比模型名字更重要。这些问题都需要一点机器学习基础。建议用 4 到 6 周学习，边学边做小实验，比如手写数字识别、文本分类、简单推荐。</div>
+    </section>
+
+    <section class="slide">
+      <div class="frame stack">
+        <div class="topline"><h2>主流大模型速览：先知道有哪些“发动机”</h2><span class="tag">06</span></div>
+        <div class="model-board">
+          <div class="model-column">
+            <h3>闭源商用模型 <span class="model-pill">API 优先</span></h3>
+            <div class="model-card"><strong>OpenAI GPT-5.5 / GPT-5 系列</strong><span>综合能力强，适合复杂推理、代码、Agent 工作流和正式产品 API 接入。</span></div>
+            <div class="model-card"><strong>Claude Opus / Sonnet 系列</strong><span>长文本、写作、代码理解和工具使用体验稳定，适合知识工作与复杂文档任务。</span></div>
+            <div class="model-card"><strong>Google Gemini 3 系列</strong><span>多模态、长上下文和 Google 生态集成突出，适合图文音视频理解类应用。</span></div>
+          </div>
+          <div class="model-column">
+            <h3>开源 / 开放权重模型 <span class="model-pill">部署优先</span></h3>
+            <div class="model-card"><strong>Qwen 系列</strong><span>中文、代码和工具调用生态活跃，适合本地实验、企业私有化和中文应用。</span></div>
+            <div class="model-card"><strong>Llama / Mistral 系列</strong><span>开放生态成熟，社区工具多，适合学习推理部署、微调和应用集成。</span></div>
+            <div class="model-card"><strong>DeepSeek 系列</strong><span>推理和代码方向影响力强，适合学习低成本推理、私有部署和工程化优化。</span></div>
+          </div>
+        </div>
+        <div class="model-advice">零基础建议：先用闭源 API 做产品原型，快速理解 AI 应用链路；再用开放权重模型学习本地部署、成本控制、私有化和微调。</div>
+      </div>
+      <div class="notes">这一页帮助学习者建立模型版图。闭源模型适合先做产品，因为 API 稳定、能力强、接入快，能让新人先把聊天、知识库和工具调用这些应用链路跑通。开放权重模型适合后半段学习部署和私有化，因为你能控制模型、硬件、成本和数据边界。要强调：模型列表会变化，不要把学习路线绑定在某一个模型名字上。真正长期有价值的是理解 API、上下文、检索、评测和部署这些通用能力。</div>
+    </section>
+
+    <section class="slide">
+      <div class="frame stack">
+        <div class="topline"><h2>阶段 4：大模型基础，进入 LLM 应用开发</h2><span class="tag">07</span></div>
+        <div class="four">
+          <div class="card green"><h3>Prompt</h3><p>角色、任务、输入边界、输出格式、少样本示例、拒答条件。</p></div>
+          <div class="card"><h3>API</h3><p>聊天补全、流式输出、函数调用、错误重试、成本统计。</p></div>
+          <div class="card blue"><h3>上下文</h3><p>Token、上下文窗口、截断、摘要记忆、长文档处理。</p></div>
+          <div class="card red"><h3>可靠性</h3><p>幻觉、格式失败、评测集、人工复核、安全提示注入。</p></div>
+        </div>
+        <div class="panel">
+          <h3>必做小项目</h3>
+          <p class="lede">做一个命令行 AI 助手：输入问题 → 调用大模型 API → 流式返回 → 保存历史 → 处理错误。</p>
+        </div>
+      </div>
+      <div class="notes">大模型阶段开始进入真正的 AI 应用开发。这里重点不是“会问 AI 问题”，而是会把大模型当成一个不稳定但强大的接口来使用。必须学会 API 调用、流式输出、prompt 结构化、JSON 输出、错误重试和成本控制。最好的练习是做一个命令行 AI 助手。它很小，但覆盖了后面所有应用都会用到的核心链路。</div>
+    </section>
+
+    <section class="slide">
+      <div class="frame stack">
+        <div class="topline"><h2>阶段 5：微调与部署，理解“什么时候不用微调”</h2><span class="tag">08</span></div>
+        <div class="three">
+          <div class="card"><h3>必学知识点</h3><ul><li>Embedding 与向量检索</li><li>LoRA / QLoRA 基本概念</li><li>量化、显存、吞吐、延迟</li><li>Ollama、vLLM、Docker</li><li>模型服务 API 化</li></ul></div>
+          <div class="card green"><h3>学习顺序</h3><ul><li>先会本地运行模型</li><li>再学量化和推理服务</li><li>再理解微调数据格式</li><li>最后做一次 LoRA 实验</li></ul></div>
+          <div class="card red"><h3>关键避坑</h3><ul><li>不要把所有问题都用微调解决</li><li>知识更新优先考虑 RAG</li><li>风格和格式问题再考虑微调</li><li>私有部署要算硬件成本</li></ul></div>
+        </div>
+      </div>
+      <div class="notes">这一阶段很容易走弯路。很多新人一听大模型就想微调，但真实项目里，知识库问答通常优先用 RAG，业务流程优先用工具调用，只有稳定风格、特定格式、领域表达等问题才考虑微调。部署也一样，不是能跑起来就结束，要理解显存、并发、延迟、量化和监控。建议先用 Ollama 跑本地模型，再用 Docker 或 vLLM 做一个简单推理服务。</div>
+    </section>
+
+    <section class="slide">
+      <div class="frame stack">
+        <div class="topline"><h2>阶段 6：AI 应用实战开发，补齐前后端和 RAG</h2><span class="tag">09</span></div>
+        <div class="matrix">
+          <div class="head">模块</div><div class="head">必学知识点</div><div class="head">推荐内容</div><div class="head">重点难点</div><div class="head">避坑</div>
+          <div class="row">前端</div><div>HTML/CSS/JS、React、聊天 UI、文件上传</div><div>做一个 ChatGPT 风格页面</div><div>状态管理、流式显示</div><div>别先追复杂 UI 框架</div>
+          <div class="row">后端</div><div>FastAPI、REST、鉴权、数据库、任务队列</div><div>封装 /chat /upload /search 接口</div><div>异步、错误处理</div><div>别把密钥写到前端</div>
+          <div class="row">RAG</div><div>文档解析、切分、向量库、重排、引用</div><div>企业知识库问答</div><div>召回质量和权限</div><div>别只堆 topK</div>
+          <div class="row">Agent</div><div>工具调用、状态、审批、日志、安全</div><div>日程助手、周报助手</div><div>控制自主性</div><div>高风险动作别自动执行</div>
+        </div>
+      </div>
+      <div class="notes">第六阶段是从学习者变成应用开发者的关键。你要把前端、后端、大模型、数据库和 RAG 串起来。建议先做聊天界面，再做后端 API，再加文件上传和向量检索，最后加工具调用。这个顺序很重要，因为它符合真实产品的组成方式。这里最大的避坑是把密钥放到浏览器前端，或者把所有业务逻辑塞进一个 prompt 里。AI 应用也是软件工程，边界要清楚。</div>
+    </section>
+
+    <section class="slide">
+      <div class="frame stack">
+        <div class="topline"><h2>每日学习计划：每天 2.5 小时的固定节奏</h2><span class="tag">10</span></div>
+        <div class="day-grid">
+          <div class="routine">
+            <div>30 分钟</div><div>复习昨天的代码和笔记，整理 3 个问题。</div>
+            <div>60 分钟</div><div>学习当天新知识，只学一个主题，不东跳西跳。</div>
+            <div>60 分钟</div><div>动手写代码或搭项目，必须产出可运行结果。</div>
+            <div>20 分钟</div><div>让 AI 帮你 code review，记录报错和解决方法。</div>
+            <div>10 分钟</div><div>写学习日志：今天学了什么、卡在哪里、明天做什么。</div>
+          </div>
+          <div class="panel">
+            <h3>每周节奏</h3>
+            <ul>
+              <li>周一到周四：学新知识 + 小练习</li>
+              <li>周五：做阶段项目功能</li>
+              <li>周六：修 bug、补文档、录演示视频</li>
+              <li>周日：复盘、整理作品集、规划下周</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="notes">零基础学习最重要的是节奏稳定。每天 2.5 小时已经足够，只要持续 6 到 9 个月，会有明显变化。关键是每天必须有代码产出，不要把学习变成收藏课程。建议每周都做一个小成果，比如一个脚本、一个页面、一个 API、一个知识库问答 demo。周日复盘尤其重要，它会让你知道自己是在前进，还是只是看了很多内容。</div>
+    </section>
+
+    <section class="slide">
+      <div class="frame stack">
+        <div class="topline"><h2>开发工具：写代码、管项目、跑服务</h2><span class="tag">11</span></div>
+        <div class="tool-grid">
+          <div class="tool-card"><strong>VS Code</strong><span>最通用的代码编辑器，插件生态强，适合作为零基础主力 IDE。</span><em>必装</em></div>
+          <div class="tool-card"><strong>Cursor / Windsurf</strong><span>AI 编程编辑器，适合让模型帮你解释代码、改 bug、生成小功能。</span><em>AI 编程</em></div>
+          <div class="tool-card"><strong>Git + GitHub</strong><span>版本管理、作品集展示、协作交付都离不开；每个项目都要建仓库。</span><em>作品集</em></div>
+          <div class="tool-card"><strong>Python + uv</strong><span>Python 是 AI 应用主语言；uv 用来管理环境、依赖和运行脚本更省心。</span><em>后端基础</em></div>
+          <div class="tool-card"><strong>Node.js + pnpm</strong><span>做前端和 Next.js 项目需要；pnpm 安装依赖快，适合现代前端项目。</span><em>前端基础</em></div>
+          <div class="tool-card"><strong>Docker Desktop</strong><span>统一运行数据库、向量库、本地服务和模型服务，减少“我电脑能跑”的问题。</span><em>部署必备</em></div>
+          <div class="tool-card"><strong>Postman / Apifox</strong><span>测试后端 API、保存接口文档、模拟请求，适合学习接口调试。</span><em>接口调试</em></div>
+          <div class="tool-card"><strong>Notion / Obsidian</strong><span>整理学习笔记、项目需求、错误案例和作品集说明，形成自己的知识库。</span><em>学习管理</em></div>
+        </div>
+      </div>
+      <div class="notes">开发工具页的重点是让学习者知道哪些工具真正要长期使用。VS Code、GitHub、Python、Node、Docker 是基础盘；Cursor 和 Windsurf 代表 AI 编程编辑器，可以提高学习效率，但不能替代基础理解。Postman 或 Apifox 用来调接口，Notion 或 Obsidian 用来沉淀知识。建议不要一次性装几十个工具，先把这 8 类用顺。</div>
+    </section>
+
+    <section class="slide">
+      <div class="frame stack">
+        <div class="topline"><h2>AI 工具：模型、编排、评测、本地部署</h2><span class="tag">12</span></div>
+        <div class="tool-grid">
+          <div class="tool-card"><strong>ChatGPT / Claude / Gemini</strong><span>日常学习、代码解释、方案设计、文档写作的主力助手。</span><em>学习助手</em></div>
+          <div class="tool-card"><strong>OpenAI / Anthropic / Gemini API</strong><span>正式开发 AI 应用的模型入口，先用 API 跑通产品链路。</span><em>模型 API</em></div>
+          <div class="tool-card"><strong>Hugging Face</strong><span>找模型、数据集和推理 Demo 的核心平台，适合理解开源生态。</span><em>模型社区</em></div>
+          <div class="tool-card"><strong>Ollama / LM Studio</strong><span>本地运行开放权重模型，适合学习私有部署和离线实验。</span><em>本地模型</em></div>
+          <div class="tool-card"><strong>LangChain / LangGraph</strong><span>构建工具调用、Agent 状态机、多步骤工作流和模型编排。</span><em>Agent 编排</em></div>
+          <div class="tool-card"><strong>LlamaIndex</strong><span>专注文档、索引、检索和 RAG 管线，适合知识库问答项目。</span><em>RAG 框架</em></div>
+          <div class="tool-card"><strong>Dify / Coze</strong><span>低代码搭建 AI 应用和工作流，适合快速验证业务场景。</span><em>低代码</em></div>
+          <div class="tool-card"><strong>LangSmith / Helicone</strong><span>记录调用链、调试 Prompt、分析成本和延迟，让 AI 应用可观测。</span><em>评测观测</em></div>
+        </div>
+      </div>
+      <div class="notes">AI 工具页要区分“学习助手”和“开发工具”。ChatGPT、Claude、Gemini 是学习和思考助手；OpenAI、Anthropic、Gemini API 是真正接进产品的模型入口；Hugging Face、Ollama、LM Studio 帮你进入开源和本地部署；LangChain、LangGraph、LlamaIndex 用于编排 RAG 和 Agent；Dify、Coze 适合快速做业务原型；LangSmith、Helicone 用于调试、观测和成本分析。</div>
+    </section>
+
+    <section class="slide">
+      <div class="frame stack">
+        <div class="topline"><h2>应用框架、数据与部署：够用、稳定、少折腾</h2><span class="tag">13</span></div>
+        <div class="four">
+          <div class="card green"><h3>后端框架</h3><ul><li>FastAPI</li><li>Flask</li><li>Celery / Redis</li><li>REST API 规范</li></ul></div>
+          <div class="card"><h3>前端框架</h3><ul><li>React</li><li>Next.js</li><li>Tailwind CSS</li><li>Streamlit 原型</li></ul></div>
+          <div class="card blue"><h3>数据工具</h3><ul><li>SQLite / PostgreSQL</li><li>Supabase</li><li>Chroma / Qdrant</li><li>Milvus / Weaviate</li></ul></div>
+          <div class="card red"><h3>部署监控</h3><ul><li>Vercel / Render</li><li>云服务器</li><li>vLLM / TGI</li><li>Sentry / 日志系统</li></ul></div>
+        </div>
+      </div>
+      <div class="notes">这一页承接前两页，把真正做应用时要用到的框架和平台放在一起。FastAPI 适合 Python 后端，React 和 Next.js 适合做正式 Web 应用，Streamlit 适合快速原型。数据层先用 SQLite 和 PostgreSQL，做知识库再加 Chroma、Qdrant、Milvus 或 Weaviate。部署层先用 Vercel、Render 或云服务器，做私有模型服务再学 vLLM、TGI、日志和监控。</div>
+    </section>
+
+    <section class="slide">
+      <div class="frame stack">
+        <div class="topline"><h2>必做实战项目：从简单到能接单</h2><span class="tag">14</span></div>
+        <div class="project-list">
+          <div class="project"><b>1</b><h3>Python 自动化脚本</h3><p>批量整理文件、读取表格、调用 API，建立编程手感。</p></div>
+          <div class="project"><b>2</b><h3>命令行 AI 助手</h3><p>接入大模型 API，支持历史记录、流式输出、错误处理。</p></div>
+          <div class="project"><b>3</b><h3>AI 聊天网页</h3><p>前端聊天 UI + 后端接口 + 模型调用 + 密钥保护。</p></div>
+          <div class="project"><b>4</b><h3>知识库问答</h3><p>上传 PDF/Word，切分入库，向量检索，带引用回答。</p></div>
+          <div class="project"><b>5</b><h3>业务 AI 助手</h3><p>接入工具调用，如生成周报、查订单、写邮件草稿。</p></div>
+          <div class="project"><b>6</b><h3>私有部署大模型</h3><p>本地或云端部署模型，提供 API，接入自己的应用。</p></div>
+        </div>
+      </div>
+      <div class="notes">这页是项目阶梯。每个项目都对应前面学过的知识点。第一步脚本训练编程基本功；第二步命令行 AI 助手训练模型调用；第三步网页聊天训练前后端；第四步知识库问答训练 RAG；第五步业务助手训练 Agent 和工具调用；第六步私有部署训练模型服务化。做完这六个项目，你就不只是学过 AI，而是有作品能展示。</div>
+    </section>
+
+    <section class="slide">
+      <div class="frame stack">
+        <div class="topline"><h2>接单与落地：把作品变成可交付方案</h2><span class="tag">15</span></div>
+        <div class="three">
+          <div class="card green"><h3>作品集</h3><ul><li>每个项目有在线演示</li><li>有 GitHub 仓库和 README</li><li>有 2 分钟演示视频</li><li>写清业务价值和技术栈</li></ul></div>
+          <div class="card"><h3>接单方向</h3><ul><li>企业知识库问答</li><li>客服/销售 AI 助手</li><li>文档自动化处理</li><li>内部流程 Copilot</li></ul></div>
+          <div class="card red"><h3>交付清单</h3><ul><li>需求确认表</li><li>原型和报价</li><li>部署文档</li><li>账号权限和维护计划</li></ul></div>
+        </div>
+        <div class="panel">
+          <h3>报价思路</h3>
+          <p class="lede">先从小项目开始：知识库问答 Demo、内部资料助手、自动生成报表。不要承诺“完全替代人”，要承诺明确流程、明确指标、明确维护范围。</p>
+        </div>
+      </div>
+      <div class="notes">最后要把学习转成真实价值。接单不是只会写代码，还要会确认需求、控制范围、交付文档和维护。新人建议先从小项目做起，比如企业内部资料问答、文档摘要、销售话术生成、周报生成。报价时不要承诺玄乎的结果，比如“准确率百分百”或者“完全替代员工”。要把交付范围写清楚：支持哪些文件、多少用户、如何部署、后续维护怎么算。</div>
+    </section>
+
+    <section class="slide">
+      <div class="frame cover">
+        <div>
+          <p class="eyebrow">The One-Line Path</p>
+          <h2>长期照着走的极简主线</h2>
+          <p class="lede">先学会写 Python 脚本，再会调大模型 API，再做前后端聊天应用，再接入 RAG 知识库，再加入 Agent 工具调用，最后学会 Docker/私有部署和项目交付。</p>
+        </div>
+        <div class="panel">
+          <p class="bigline">Python → API → Web 应用 → RAG → Agent → 部署 → 接单</p>
+          <p class="lede">每一段只问一句：我能不能做出一个可演示、可部署、可维护的小作品？</p>
+        </div>
+      </div>
+      <div class="notes">收尾时把路线压缩成一句话：Python 到 API，到 Web 应用，到 RAG，到 Agent，到部署，到接单。只要不偏离这条主线，就不会走太多弯路。遇到新技术时先问：它能不能帮助我做出更稳定、更有价值的 AI 应用？如果不能，先放一放。学完这条线，AI 聊天机器人、知识库问答、AI 助手、私有部署大模型都会成为可完成的项目，而不是停留在概念里。</div>
+    </section>
+  </main>
+
+  <div class="nav">
+    <button id="prev" type="button">上一页</button>
+    <span class="counter" id="counter">1 / 17</span>
+    <div>
+      <button id="overviewBtn" type="button">总览</button>
+      <button id="presenterBtn" type="button">演讲</button>
+      <button id="next" type="button">下一页</button>
+    </div>
+  </div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <div class="overview" id="overview" aria-hidden="true"></div>
+
+  <script>
+    const slides = [...document.querySelectorAll(".slide")];
+    const counter = document.getElementById("counter");
+    const bar = document.getElementById("bar");
+    const overview = document.getElementById("overview");
+    let idx = Number(location.hash.replace("#/", "")) - 1;
+    if (!Number.isInteger(idx) || idx < 0 || idx >= slides.length) idx = 0;
+
+    function titleOf(slide) {
+      return slide.querySelector("h1, h2")?.textContent.trim().replace(/\s+/g, " ") || "Slide";
+    }
+
+    function notesOf(i) {
+      return slides[i].querySelector(".notes")?.textContent.trim() || "";
+    }
+
+    function render() {
+      slides.forEach((slide, i) => slide.classList.toggle("is-active", i === idx));
+      counter.textContent = `${idx + 1} / ${slides.length}`;
+      bar.style.width = `${((idx + 1) / slides.length) * 100}%`;
+      history.replaceState(null, "", `#/${idx + 1}`);
+      if (window.presenter && !window.presenter.closed) {
+        window.presenter.postMessage({ type: "goto", idx, total: slides.length, title: titleOf(slides[idx]), notes: notesOf(idx) }, "*");
+      }
+    }
+
+    function goto(next) {
+      idx = Math.max(0, Math.min(slides.length - 1, next));
+      render();
+    }
+
+    function buildOverview() {
+      overview.innerHTML = "";
+      slides.forEach((slide, i) => {
+        const thumb = document.createElement("button");
+        thumb.className = "thumb";
+        thumb.innerHTML = `<b>${String(i + 1).padStart(2, "0")}</b><span>${titleOf(slide)}</span>`;
+        thumb.addEventListener("click", () => {
+          idx = i;
+          overview.classList.remove("is-open");
+          render();
+        });
+        overview.appendChild(thumb);
+      });
+    }
+
+    function toggleOverview() {
+      overview.classList.toggle("is-open");
+      overview.setAttribute("aria-hidden", overview.classList.contains("is-open") ? "false" : "true");
+    }
+
+    function openPresenter() {
+      const w = window.open("", "ai-learning-presenter", "width=1180,height=760");
+      if (!w) return;
+      window.presenter = w;
+      w.document.open();
+      w.document.write(`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>演讲者视图</title><style>
+        body{margin:0;background:#101715;color:#f7f8f4;font-family:Inter,"Noto Sans SC","Microsoft YaHei",sans-serif}
+        .wrap{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:180px 1fr;gap:14px;padding:14px;height:100vh;box-sizing:border-box}
+        .card{border:1px solid #33413d;border-radius:8px;background:#17211f;padding:18px;overflow:auto}
+        h2{margin:0 0 12px;font-size:14px;color:#8dd8c5;letter-spacing:0}
+        .big{font-size:28px;line-height:1.25;font-weight:850}
+        .notes{font-size:23px;line-height:1.65;white-space:pre-wrap}
+        .timer{font-size:58px;font-weight:900;color:#f0c76c}
+        button{border:1px solid #53615d;background:#22302c;color:#f7f8f4;border-radius:6px;padding:10px 14px;margin-right:8px;cursor:pointer}
+      </style></head><body>
+      <div class="wrap">
+        <div class="card"><h2>CURRENT</h2><div class="big" id="title"></div></div>
+        <div class="card"><h2>TIMER</h2><div class="timer" id="timer">00:00</div><div id="count"></div></div>
+        <div class="card" style="grid-column:1/3"><h2>SPEAKER SCRIPT</h2><div class="notes" id="notes"></div></div>
+        <div style="position:fixed;right:16px;bottom:16px"><button onclick="opener.goto(opener.idx-1)">上一页</button><button onclick="opener.goto(opener.idx+1)">下一页</button></div>
+      </div>
+      <script>
+        const started=Date.now();
+        function pad(n){return String(n).padStart(2,"0")}
+        setInterval(()=>{const s=Math.floor((Date.now()-started)/1000);document.getElementById("timer").textContent=pad(Math.floor(s/60))+":"+pad(s%60)},500);
+        addEventListener("message", e => {
+          const d=e.data||{};
+          if(d.type==="goto"){title.textContent=d.title;notes.textContent=d.notes;count.textContent=(d.idx+1)+" / "+d.total}
+        });
+        addEventListener("keydown", e => { if(e.key==="ArrowRight") opener.goto(opener.idx+1); if(e.key==="ArrowLeft") opener.goto(opener.idx-1); });
+      <\/script></body></html>`);
+      w.document.close();
+      render();
+    }
+
+    document.getElementById("prev").addEventListener("click", () => goto(idx - 1));
+    document.getElementById("next").addEventListener("click", () => goto(idx + 1));
+    document.getElementById("overviewBtn").addEventListener("click", toggleOverview);
+    document.getElementById("presenterBtn").addEventListener("click", openPresenter);
+
+    addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === " " || event.key === "PageDown") goto(idx + 1);
+      if (event.key === "ArrowLeft" || event.key === "PageUp") goto(idx - 1);
+      if (event.key === "Home") goto(0);
+      if (event.key === "End") goto(slides.length - 1);
+      if (event.key.toLowerCase() === "o") toggleOverview();
+      if (event.key.toLowerCase() === "s") openPresenter();
+      if (event.key.toLowerCase() === "f") document.documentElement.requestFullscreen?.();
+      if (event.key === "Escape") overview.classList.remove("is-open");
+    });
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+    addEventListener("touchstart", (event) => {
+      const touch = event.changedTouches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    }, { passive: true });
+
+    addEventListener("touchend", (event) => {
+      const touch = event.changedTouches[0];
+      const dx = touch.clientX - touchStartX;
+      const dy = touch.clientY - touchStartY;
+      if (Math.abs(dx) > 58 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+        goto(idx + (dx < 0 ? 1 : -1));
+      }
+    }, { passive: true });
+
+    window.goto = goto;
+    Object.defineProperty(window, "idx", { get: () => idx });
+    buildOverview();
+    render();
+  </script>
+</body>
+</html>
