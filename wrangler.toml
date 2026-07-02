@@ -1,0 +1,3 @@
+name = "ai-learn-roadmap"
+compatibility_date = "2026-07-02"
+main = "worker.js"
